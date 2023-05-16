@@ -1,0 +1,71 @@
+document.addEventListener("DOMContentLoaded", function() {
+  const lengthSlider = document.getElementById("passwordLength");
+  const lengthLabel = document.getElementById("lengthLabel");
+
+  function updateLength() {
+    lengthLabel.textContent = lengthSlider.value;
+  }
+
+  function generatePassword() {
+    const passwordLength = lengthSlider.value;
+    const includeUppercase = document.getElementById("uppercase").checked;
+    const includeLowercase = document.getElementById("lowercase").checked;
+    const includeDigits = document.getElementById("digits").checked;
+    const includeSymbols = document.getElementById("symbols").checked;
+
+    const uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
+    const digitChars = "0123456789";
+    const symbolChars = "!@#$%^&*()_+-=[]{}|;:,.<>?";
+
+    let characters = "";
+    let generatedPassword = "";
+
+    if (includeUppercase) {
+      characters += uppercaseChars;
+    }
+    if (includeLowercase) {
+      characters += lowercaseChars;
+    }
+    if (includeDigits) {
+      characters += digitChars;
+    }
+    if (includeSymbols) {
+      characters += symbolChars;
+    }
+
+    if (characters.length > 0) {
+      for (let i = 0; i < passwordLength; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        generatedPassword += characters.charAt(randomIndex);
+      }
+    } else {
+      generatedPassword = "Please select at least one character type.";
+    }
+
+    const passwordInput = document.getElementById("password");
+    passwordInput.value = generatedPassword;
+  }
+
+  function copyPassword() {
+    const passwordInput = document.getElementById("password");
+    passwordInput.select();
+    document.execCommand("copy");
+  }
+
+  function randomizeParameters() {
+    lengthSlider.value = Math.floor(Math.random() * (20 - 8 + 1)) + 8;
+    document.getElementById("uppercase").checked = Math.random() >= 0.5;
+    document.getElementById("lowercase").checked = Math.random() >= 0.5;
+    document.getElementById("digits").checked = Math.random() >= 0.5;
+    document.getElementById("symbols").checked = Math.random() >= 0.5;
+
+    updateLength();
+  }
+
+  updateLength(); 
+
+  window.generatePassword = generatePassword;
+  window.copyPassword = copyPassword;
+  window.randomizeParameters = randomizeParameters;
+});

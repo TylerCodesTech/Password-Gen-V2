@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Password Generator</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script>
+    function generatePassword() {
+      var length = document.getElementById("passwordLength").value;
+      var uppercaseChecked = document.getElementById("uppercase").checked;
+      var lowercaseChecked = document.getElementById("lowercase").checked;
+      var digitsChecked = document.getElementById("digits").checked;
+      var symbolsChecked = document.getElementById("symbols").checked;
+
+      var uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      var lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
+      var digitChars = "0123456789";
+      var symbolChars = "!@#$%^&*()-=_+[]{}|;:,.<>/?";
+
+      var availableChars = "";
+      var generatedPassword = "";
+
+      if (uppercaseChecked) {
+        availableChars += uppercaseChars;
+      }
+
+      if (lowercaseChecked) {
+        availableChars += lowercaseChars;
+      }
+
+      if (digitsChecked) {
+        availableChars += digitChars;
+      }
+
+      if (symbolsChecked) {
+        availableChars += symbolChars;
+      }
+
+      if (availableChars === "") {
+        alert("Please select at least one character type.");
+        return;
+      }
+
+      for (var i = 0; i < length; i++) {
+        var randomIndex = Math.floor(Math.random() * availableChars.length);
+        generatedPassword += availableChars.charAt(randomIndex);
+      }
+
+      document.getElementById("password").value = generatedPassword;
+    }
+
+    function copyPassword() {
+      var passwordInput = document.getElementById("password");
+      passwordInput.select();
+      passwordInput.setSelectionRange(0, 99999);
+      document.execCommand("copy");
+      alert("Password copied to clipboard.");
+    }
+
+    function randomizeParameters() {
+      var lengthSlider = document.getElementById("passwordLength");
+      lengthSlider.value = Math.floor(Math.random() * (20 - 8 + 1)) + 8;
+
+      var checkboxes = document.querySelectorAll('.parameter-controls input[type="checkbox"]');
+      checkboxes.forEach(function(checkbox) {
+        checkbox.checked = Math.random() >= 0.5;
+      });
+
+      updateLength();
+    }
+
+    function updateLength() {
+      var lengthLabel = document.getElementById("lengthLabel");
+      var lengthSlider = document.getElementById("passwordLength");
+      lengthLabel.textContent = lengthSlider.value;
+    }
+  </script>
+</head>
+
+<body>
+  <header>
+    <h1>Password Generator</h1>
+  </header>
+
+  <div class="password-output">
+    <label for="password">Generated Password:</label>
+    <input type="text" id="password" readonly>
+    <button onclick="copyPassword()">Copy</button>
+  </div>
+
+  <div class="parameter-controls">
+    <label for="passwordLength">Password Length:</label>
+    <input type="range" id="passwordLength" min="8" max="20" step="1" onchange="updateLength()">
+    <span id="lengthLabel">8</span>
+  </div>
+
+  <div class="parameter-controls">
+    <input type="checkbox" id="uppercase" checked>
+    <label for="uppercase">Include Uppercase Letters</label>
+  </div>
+
+  <div class="parameter-controls">
+    <input type="checkbox" id="lowercase" checked>
+    <label for="lowercase">Include Lowercase Letters</label>
+  </div>
+
+  <div class="parameter-controls">
+    <input type="checkbox" id="digits" checked
+    <label for="digits">Include Digits</label>
+  </div>
+
+  <div class="parameter-controls">
+    <input type="checkbox" id="symbols" checked>
+    <label for="symbols">Include Symbols</label>
+  </div>
+
+  <div class="generate-button">
+    <button onclick="generatePassword()">Generate Password</button>
+    <button onclick="randomizeParameters()">Randomize Parameters</button>
+  </div>
+
+  <div class="password-strength">
+  </div>
+
+  <footer>
+    &copy; v2 password gen, working on file storage next
+  </footer>
+</body>
+</html>
